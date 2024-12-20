@@ -1,7 +1,7 @@
 ﻿using Amazon.Runtime.Internal.Util;
 using TransportProject.Core.Repository.Abstract;
-using TransportProject.Data;
-using TransportProject.Data.Dtos;
+using TransportProject.Data.DbContexts;
+using TransportProject.Data.Dtos.MessageDtos;
 using TransportProject.Data.Entities;
 
 namespace TransportProject.Core.Repository.Concrete

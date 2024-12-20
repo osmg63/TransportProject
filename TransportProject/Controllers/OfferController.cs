@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TransportProject.Data.Dtos;
+using TransportProject.Data.Dtos.OfferDtos;
 using TransportProject.Service.Abstract;
 
 namespace TransportProject.Controllers
@@ -16,8 +16,8 @@ namespace TransportProject.Controllers
         }
        
         [HttpGet("GetAllOffer")]
-        public IActionResult GetAll() { 
-            var  data=_offerService.GetAllOffer();
+        public async Task<IActionResult> GetAll() { 
+            var  data= await _offerService.GetAllOffer();
 
             return Ok(data);
         
@@ -38,31 +38,31 @@ namespace TransportProject.Controllers
 
         }
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-          var data=  _offerService.OfferDelete(id);
+          var data=await  _offerService.OfferDelete(id);
             return Ok(data);
 
         }
 
         [HttpPost("ChangeOfferActiveById")]
-        public IActionResult ChangeOfferActive(int id)
+        public async Task<IActionResult> ChangeOfferActive(int id)
         {
-            var data =_offerService.ChangeOfferActive(id);
+            var data =await _offerService.ChangeOfferActive(id);
             return Ok(data);
 
         }
         [HttpPost("ChangeOfferInActiveById")]
-        public IActionResult ChangeOfferInActive(int id)
+        public async Task<IActionResult> ChangeOfferInActive(int id)
         {
-            var data = _offerService.ChangeOfferInActive(id);
+            var data =await _offerService.ChangeOfferInActive(id);
             return Ok(data);
 
         }
         [HttpPost("AddOffer")]
-        public IActionResult Add(RequestOfferDto offer)
+        public async  Task<IActionResult> Add(RequestOfferDto offer)
         {
-            var result = _offerService.AddOffer(offer);
+            var result = await _offerService.AddOffer(offer);
             return Ok(result);
         }
     }

@@ -1,10 +1,11 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using TransportProject.Service.Abstract;
 
 namespace TransportProject.Service.Concrete
 {
-    public class S3Service
+    public class S3Service:IS3Service
     {
         private readonly IAmazonS3 _s3;
         private readonly string _bucketName;

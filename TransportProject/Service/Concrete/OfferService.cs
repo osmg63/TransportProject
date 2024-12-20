@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using TransportProject.Core.Repository.Abstract;
-using TransportProject.Data.Dtos;
+using TransportProject.Data.Dtos.OfferDtos;
 using TransportProject.Data.Entities;
 using TransportProject.Service.Abstract;
 
@@ -19,49 +19,56 @@ namespace TransportProject.Service.Concrete
         }
 
 
-        public RequestOfferDto AddOffer(RequestOfferDto offer) { 
+        public async Task<ResponseOfferDto> AddOffer(RequestOfferDto offer) { 
         
             
-            var data=_unitOfWork.OfferRepository.Add(_mapper.Map<Offer>(offer));
-            return _mapper.Map<RequestOfferDto>(data);
+            var data= await _unitOfWork.OfferRepository.Add(_mapper.Map<Offer>(offer));
+             await _unitOfWork.SaveChangeAsync();
+            return _mapper.Map<ResponseOfferDto>(data);
         
         }
 
-        public Offer ChangeOfferActive(int id)
+        public async Task<ResponseOfferDto> ChangeOfferActive(int id)
         {
-            var data=_unitOfWork.OfferRepository.Get(x=>x.Id==id);
+            var data=await _unitOfWork.OfferRepository.Get(x=>x.Id==id);
             if (data==null) return null;
             data.IsActive = true;
-            return data;
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<ResponseOfferDto>(data);
 
         }
-        public Offer ChangeOfferInActive(int id)
+        public async Task<ResponseOfferDto> ChangeOfferInActive(int id)
         {
-            var data = _unitOfWork.OfferRepository.Get(x => x.Id == id);
+            var data =await _unitOfWork.OfferRepository.Get(x => x.Id == id);
             if (data == null) return null;
             data.IsActive = false;
-            return data;
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<ResponseOfferDto>(data);
         }
 
-        public List<Offer> GetAllOffer()
+        public async Task<List<ResponseOfferDto>> GetAllOffer()
         {
-            return _unitOfWork.OfferRepository.GetAll();
+            var data= await _unitOfWork.OfferRepository.GetAll();
+            return _mapper.Map<List<ResponseOfferDto>>(data);
+
         }
-        public List<Offer> GetOfferByUserId(int id) {
+        public List<ResponseOfferDto> GetOfferByUserId(int id) {
             
             var data=_unitOfWork.OfferRepository.GetOffersByUserId( id);
 
-            return data;
-        
+            return _mapper.Map<List<ResponseOfferDto>>(data);
+
         }
-        public bool OfferDelete(int id)
+        public async Task<bool> OfferDelete(int id)
         {
             try
             {
-                var data=_unitOfWork.OfferRepository.Get(x=>x.Id==id);
-
+                var data=await _unitOfWork.OfferRepository.Get(x=>x.Id==id);
+                
                 if (data==null) return false;   
-                _unitOfWork.OfferRepository.Delete(data);
+                await _unitOfWork.OfferRepository.Delete(data);
                 return true;
             }
             catch (Exception ex) { 
@@ -69,14 +76,14 @@ namespace TransportProject.Service.Concrete
             
             }
         }
-        public bool OfferAccept(int id)
+        public async Task<bool> OfferAccept(int id)
         {
             try
             {
-                var data= _unitOfWork.OfferRepository.Get(x=>x.Id==id);
+                var data=await _unitOfWork.OfferRepository.Get(x=>x.Id==id);
                 if (data==null) return false;
                 data.IsAccepted = true;
-                _unitOfWork.OfferRepository.SaveChanges();
+                await _unitOfWork.SaveChangeAsync();
                 return true;
             }
             catch (Exception ex)
@@ -84,12 +91,12 @@ namespace TransportProject.Service.Concrete
                 return false;
             }
         }
-        public List<Offer> GetOfferAcceptByUserId(int id) {
+        public List<ResponseOfferDto> GetOfferAcceptByUserId(int id) {
 
             var data=_unitOfWork.OfferRepository.GetAcceptOffersByUserId(id);
-            return data;
-        
-        
+            return _mapper.Map<List<ResponseOfferDto>>(data);
+
+
         }
 
 

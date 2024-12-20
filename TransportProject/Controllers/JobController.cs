@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TransportProject.Data.Dtos;
+using TransportProject.Data.Dtos.JobDtos;
 using TransportProject.Data.Entities;
 using TransportProject.Service.Abstract;
 using TransportProject.Service.Concrete;
@@ -11,9 +11,9 @@ namespace TransportProject.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
-        public readonly JobService _jobService;
+        public readonly IJobService _jobService;
 
-        public JobController(JobService jobService)
+        public JobController(IJobService jobService)
         {
             _jobService = jobService;
         }
@@ -61,10 +61,10 @@ namespace TransportProject.Controllers
         }
 
         [HttpPost("AddJob")]
-        public IActionResult Add(AddJobRequest add)
+        public async Task<IActionResult> Add(AddJobRequest add)
         {
 
-            var result=_jobService.AddJob(add.CreateJob, add.Departure, add.Destination);
+            var result=await _jobService.AddJob(add.CreateJob, add.Departure, add.Destination);
             return Ok(result);
 
             
@@ -77,23 +77,23 @@ namespace TransportProject.Controllers
         }
       
         [HttpPost("ChangeJobActiveById")]
-        public IActionResult ChangeJobActive(int id)
+        public async Task<IActionResult> ChangeJobActive(int id)
         {
-            var data = _jobService.ChangeJobActive(id);
+            var data = await _jobService.ChangeJobActive(id);
             return Ok(data);
 
         }
         [HttpPost("ChangeJobInActiveById")]
-        public IActionResult ChangeJobInActive(int id)
+        public async Task<IActionResult> ChangeJobInActive(int id)
         {
-            var data = _jobService.ChangeJobInActive(id);
+            var data = await _jobService.ChangeJobInActive(id);
             return Ok(data);
 
         }
         [HttpPost("UpdateJob")]
-        public IActionResult UpdateJob(AddJobRequest add)
+        public async Task<IActionResult> UpdateJob(AddJobRequest add)
         {
-            var result = _jobService.Update(add.CreateJob, add.Departure, add.Destination);
+            var result = await _jobService.Update(add.CreateJob, add.Departure, add.Destination);
             return Ok(result);
 
 

@@ -1,8 +1,9 @@
 ﻿using TransportProject.Data.Entities.Location;
+using TransportProject.Data.Entities;
 
-namespace TransportProject.Data.Dtos
+namespace TransportProject.Data.Dtos.JobDtos
 {
-    public class ResponseJobDto
+    public class CreateJobDto
     {
         public int Id { get; set; }
         public string JobName { get; set; }
@@ -11,9 +12,9 @@ namespace TransportProject.Data.Dtos
         public DateTime JobDate { get; set; }
         public string Photo { get; set; }
         public int UserId { get; set; }
-
+        public bool IsActive { get; set; }
         public int DepartureAddressId { get; set; }
-
         public int DestinationAddressId { get; set; }
+
     }
 }

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TransportProject.Data.Dtos;
+using TransportProject.Data.Dtos.MessageDtos;
 using TransportProject.Data.Entities;
+using TransportProject.Service.Abstract;
 using TransportProject.Service.Concrete;
 
 namespace TransportProject.Controllers
@@ -10,42 +11,42 @@ namespace TransportProject.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        public readonly MessageService _messageService;
+        public readonly IMessageService _messageService;
 
-        public MessageController(MessageService messageService)
+        public MessageController(IMessageService messageService)
         {
             _messageService = messageService;
         }
 
 
         [HttpGet("messagebox")]
-        public IActionResult GetByIdSenderUser(int id) { 
-            var result=_messageService.GetByIdSenderUser(id);
+        public async Task<IActionResult> GetByIdSenderUser(int id) { 
+            var result= await _messageService.GetByIdSenderUser(id);
             return Ok(result);
             
         
         }
         [HttpPost("AddMessage")]
-        public IActionResult Add(ResponseMessageDto message)
+        public async Task<IActionResult> Add(ResponseMessageDto message)
         {
-            var result = _messageService.Add(message);
+            var result =await _messageService.Add(message);
             return Ok(result);
 
 
         }
         [HttpGet("GetAllMessage")]
-        public IActionResult GetAllMessage()
+        public async Task<IActionResult> GetAllMessage()
         {
-            var result = _messageService.GetAllMessage();
+            var result =await _messageService.GetAllMessage();
             return Ok(result);
 
 
         }
         
        [HttpPost("GetByRepeitIdEndSenderIdMessage")]
-       public IActionResult GetByRepeitIdEndSenderIdMessage(GetByRepeitIdEndSenderIdMessageDto dto)
+       public async Task<IActionResult> GetByRepeitIdEndSenderIdMessage(GetByRepeitIdEndSenderIdMessageDto dto)
        {
-            var result = _messageService.GetByRecipientIdEndSenderIdMessage(dto);
+            var result =await _messageService.GetByRecipientIdEndSenderIdMessage(dto);
             return Ok(result);
 
 

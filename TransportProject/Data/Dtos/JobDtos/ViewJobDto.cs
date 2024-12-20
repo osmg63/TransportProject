@@ -1,4 +1,4 @@
-﻿namespace TransportProject.Data.Dtos
+﻿namespace TransportProject.Data.Dtos.JobDtos
 {
     public class ViewJobDto
     {
@@ -9,7 +9,7 @@
         public DateTime JobDate { get; set; }
         public string Photo { get; set; }
         public int UserId { get; set; }
-        public bool Active{ get; set; }
+        public bool Active { get; set; }
         public int DepartureAddressId { get; set; }
 
         public int DestinationAddressId { get; set; }

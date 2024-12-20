@@ -1,6 +1,4 @@
-﻿using TransportProject.Data.Entities;
-
-namespace TransportProject.Data.Dtos
+﻿namespace TransportProject.Data.Dtos.OfferDtos
 {
     public class RequestOfferDto
     {

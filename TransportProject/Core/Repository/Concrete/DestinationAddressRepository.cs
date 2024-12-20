@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using TransportProject.Core.Repository.Abstract;
-using TransportProject.Data;
+using TransportProject.Data.DbContexts;
 using TransportProject.Data.Entities.Location;
 
 namespace TransportProject.Core.Repository.Concrete

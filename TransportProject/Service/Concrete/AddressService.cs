@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using TransportProject.Core.Repository.Abstract;
-using TransportProject.Data.Dtos;
+using TransportProject.Data.Dtos.AddressDtos;
 using TransportProject.Data.Entities.Location;
+using TransportProject.Service.Abstract;
 
 namespace TransportProject.Service.Concrete
 {
-    public class AddressService
+    public class AddressService: IAddressService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -17,8 +18,8 @@ namespace TransportProject.Service.Concrete
         }
 
 
-        public List<CityResponseDto> GetAllCity() {
-            var data= _mapper.Map<List<CityResponseDto>>(  _unitOfWork.CityRepository.GetAll());
+        public async Task<List<CityResponseDto>> GetAllCity() {
+            var data= _mapper.Map<List<CityResponseDto>>( await _unitOfWork.CityRepository.GetAll());
             return data;
         }
         public List<DistrictResponseDto> GetDistrictById(int id) { 

@@ -1,6 +1,6 @@
 ﻿using TransportProject.Data.Entities.Location;
 
-namespace TransportProject.Data.Dtos
+namespace TransportProject.Data.Dtos.AddressDtos
 {
     public class CreateAddress
     {

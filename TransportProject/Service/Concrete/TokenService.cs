@@ -5,10 +5,11 @@ using System.Security.Claims;
 using System.Text;
 using TransportProject.Data.Entities;
 using TransportProject.Security;
+using TransportProject.Service.Abstract;
 
 namespace TransportProject.Service.Concrete
 {
-    public class TokenService
+    public class TokenService:ITokenService
     {
         private readonly ConfigJwt _configJwt;
 

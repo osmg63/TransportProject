@@ -1,4 +1,4 @@
-﻿using TransportProject.Data.Dtos;
+﻿using TransportProject.Data.Dtos.AddressDtos;
 using TransportProject.Data.Entities.Location;
 
 namespace TransportProject.Core.Repository.Abstract

@@ -1,17 +1,21 @@
-﻿using TransportProject.Data.Dtos;
+﻿using TransportProject.Data.Dtos.OfferDtos;
 using TransportProject.Data.Entities;
 
 namespace TransportProject.Service.Abstract
 {
     public interface IOfferService
     {
-        RequestOfferDto AddOffer(RequestOfferDto offer);
-        List<Offer> GetAllOffer();
-        List<Offer> GetOfferByUserId(int id);
-        bool OfferDelete(int id);
-        Offer ChangeOfferActive(int id);
-        Offer ChangeOfferInActive(int id);
-        bool OfferAccept(int id);
-        List<Offer> GetOfferAcceptByUserId(int id);
+        Task<ResponseOfferDto> AddOffer(RequestOfferDto offer);
+        Task<ResponseOfferDto> ChangeOfferActive(int id);
+        Task<ResponseOfferDto> ChangeOfferInActive(int id);
+        Task<List<ResponseOfferDto>> GetAllOffer();
+        Task<bool> OfferDelete(int id);
+        List<ResponseOfferDto> GetOfferAcceptByUserId(int id);
+        List<ResponseOfferDto> GetOfferByUserId(int id);
+        Task<bool> OfferAccept(int id);
+
+
+
+
     }
 }

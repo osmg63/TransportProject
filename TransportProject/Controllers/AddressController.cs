@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TransportProject.Service.Abstract;
 using TransportProject.Service.Concrete;
 
 namespace TransportProject.Controllers
@@ -8,18 +9,18 @@ namespace TransportProject.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
-        private readonly AddressService _addressService;
+        private readonly IAddressService _addressService;
 
-        public AddressController(AddressService addressService)
+        public AddressController(IAddressService addressService)
         {
             _addressService = addressService;
         }
 
 
         [HttpGet("GetAllCity")]
-        public IActionResult GetAllCity()
+        public async Task<IActionResult> GetAllCity()
         {
-           var data= _addressService.GetAllCity();
+           var data= await _addressService.GetAllCity();
             return Ok(data);
 
 

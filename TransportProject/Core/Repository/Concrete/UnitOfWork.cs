@@ -1,5 +1,5 @@
 ﻿using TransportProject.Core.Repository.Abstract;
-using TransportProject.Data;
+using TransportProject.Data.DbContexts;
 
 namespace TransportProject.Core.Repository.Concrete
 {

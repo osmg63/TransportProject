@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using TransportProject.Data.Dtos;
-using TransportProject.Data.Entities;
+using TransportProject.Data.Dtos.UserDtos;
+using TransportProject.Data.Validations;
 using TransportProject.Service.Abstract;
-using TransportProject.Service.Concrete;
 
 namespace TransportProject.Controllers
 {
@@ -14,26 +11,26 @@ namespace TransportProject.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly MailService _mailService;
+        private readonly IMailService _mailService;
 
 
-        public UserController(IUserService userService, MailService mailService)
+        public UserController(IUserService userService, IMailService mailService)
         {
             _userService = userService;
             _mailService = mailService;
         }
 
         [HttpGet("GetById/{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
 
-            var data = _userService.GetById(id);
+            var data = await _userService.GetById(id);
             return Ok(data);
         }
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var data = _userService.GetAll();
+            var data = await _userService.GetAll();
             return Ok(data);
         }
        
@@ -45,16 +42,23 @@ namespace TransportProject.Controllers
             return Ok();
         }
         [HttpGet("UserActiveFalse")]
-        public IActionResult UserActiveFalse(int id)
+        public async Task<IActionResult> UserActiveFalse(int id)
         {
-            _userService.UserActiveFalse(id);
+            await _userService.UserActiveFalse(id);
             return Ok();
         }
         [AllowAnonymous]
         [HttpPost("Create")]
-        public IActionResult Add(RequestUserDto user)
+        public async Task<IActionResult>  Add(RequestUserDto user)
         {
-            _userService.Add(user);
+            var validator = new RequestUserDtoValidator();
+            var resultValidator = validator.Validate(user);
+            if (!resultValidator.IsValid)
+            {
+                var data = string.Join("; ", resultValidator.Errors.Select(x => x.ErrorMessage));
+                return BadRequest(data);
+            }
+            await _userService.Add(user);
             return Ok();
         }
         [HttpPost("Update")]
@@ -67,17 +71,31 @@ namespace TransportProject.Controllers
       
 
         [HttpPost("Reset-Password")]
-        public  async Task<IActionResult> ResetPassword(int id, string token, string password)
+        public  async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
         {
-            
-           var data= await _userService.ResetPassword(id, password,token);
+            var validator = new ResetPasswordDtoValidator();
+            var resultValidator = validator.Validate(dto);
+            if (!resultValidator.IsValid)
+            {
+                var dataValidator = string.Join("; ", resultValidator.Errors.Select(x => x.ErrorMessage));
+                return BadRequest(dataValidator);
+            }
+
+            var data= await _userService.ResetPassword(dto);
             return Ok(data);
         }
         [AllowAnonymous]
         [HttpPost("Login")]
-        public IActionResult Login(UserLoginDto login)
+        public async Task<IActionResult> Login(UserLoginDto login)
         {
-            var data=_userService.Login(login);
+            var validator = new UserLoginDtoValidator();
+            var resultValidator = validator.Validate(login);
+            if (!resultValidator.IsValid)
+            {
+                var dataValidator = string.Join("; ", resultValidator.Errors.Select(x => x.ErrorMessage));
+                return BadRequest(dataValidator);
+            }
+            var data=await _userService.Login(login);
             return Ok(data);
         }
 

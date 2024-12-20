@@ -1,4 +1,4 @@
-﻿using TransportProject.Data.Dtos;
+﻿using TransportProject.Data.Dtos.JobDtos;
 using TransportProject.Data.Entities;
 
 namespace TransportProject.Core.Repository.Abstract

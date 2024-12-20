@@ -1,6 +1,6 @@
 ﻿using TransportProject.Core.Repository.Abstract;
-using TransportProject.Data;
-using TransportProject.Data.Dtos;
+using TransportProject.Data.DbContexts;
+using TransportProject.Data.Dtos.JobDtos;
 using TransportProject.Data.Entities;
 using TransportProject.Data.Entities.Location;
 

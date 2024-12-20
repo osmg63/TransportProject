@@ -19,7 +19,12 @@ namespace TransportProject.Data.Configuration
 
             builder.Property(x => x.Brand)
                 .IsRequired()
-                .HasMaxLength(100); 
+                .HasMaxLength(100);
+            // Offer -> User ilişkisi
+            builder.HasOne(o => o.User)
+                .WithMany(u => u.Vehicles)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

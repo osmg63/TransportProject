@@ -1,4 +1,4 @@
-﻿namespace TransportProject.Data.Dtos
+﻿namespace TransportProject.Data.Dtos.AddressDtos
 {
     public class CityResponseDto
     {

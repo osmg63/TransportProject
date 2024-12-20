@@ -1,16 +1,16 @@
-﻿using MimeKit;
-using System.Text;
+﻿using System.Text;
 using System.Net;
 using System.Net.Mail;
 using TransportProject.Core.Repository.Abstract;
+using TransportProject.Service.Abstract;
 
 namespace TransportProject.Service.Concrete
 {
-    public class MailService
+    public class MailService:IMailService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly TokenService _tokenService;
-        public MailService(IUnitOfWork unitOfWork,TokenService tokenService)
+        private readonly ITokenService _tokenService;
+        public MailService(IUnitOfWork unitOfWork,ITokenService tokenService)
         {
             _unitOfWork = unitOfWork;
             _tokenService = tokenService;
@@ -57,7 +57,7 @@ namespace TransportProject.Service.Concrete
                 "Saygılarımızla...<br><br><br>HO - Transport A.Ş.");
 
             // Kullanıcının e-posta adresini almak
-            var user = _unitOfWork.UserRepository.Get(x => x.Id == Convert.ToInt32(userId));
+            var user = await _unitOfWork.UserRepository.Get(x => x.Id == Convert.ToInt32(userId));
 
             if (user != null)
             {

@@ -1,18 +1,20 @@
 ﻿using AutoMapper;
 using TransportProject.Core.Repository.Abstract;
-using TransportProject.Data.Dtos;
+using TransportProject.Data.Dtos.AddressDtos;
+using TransportProject.Data.Dtos.JobDtos;
 using TransportProject.Data.Entities.Location;
+using TransportProject.Service.Abstract;
 
 
 namespace TransportProject.Service.Concrete
 {
-    public class JobService
+    public class JobService:IJobService
     {
 
         public readonly IUnitOfWork _unitOfWork;
-        public readonly S3Service _s3Service;
+        public readonly IS3Service _s3Service;
         public readonly IMapper _mapper;
-        public JobService(IUnitOfWork unitOfWork, IMapper mapper, S3Service s3Service)
+        public JobService(IUnitOfWork unitOfWork, IMapper mapper, IS3Service s3Service)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -21,10 +23,10 @@ namespace TransportProject.Service.Concrete
 
         public async Task<bool> Update(CreateJobDto jobTo, CreateAddress departure, CreateAddress destination)
         {
-            var dataJob = _unitOfWork.JobRepository.Get(x => x.Id == jobTo.Id);
+            var dataJob =await _unitOfWork.JobRepository.Get(x => x.Id == jobTo.Id);
 
-            var dataDeparture = _unitOfWork.DepartureAddressRepository.Get(x => x.Id == departure.Id);
-            var dataDestination = _unitOfWork.DestinationAddressRepository.Get(x => x.Id == destination.Id);
+            var dataDeparture =await _unitOfWork.DepartureAddressRepository.Get(x => x.Id == departure.Id);
+            var dataDestination =await _unitOfWork.DestinationAddressRepository.Get(x => x.Id == destination.Id);
 
             if (dataJob == null || dataDeparture == null || dataDestination == null)
             {
@@ -34,13 +36,13 @@ namespace TransportProject.Service.Concrete
             try
             {
                 _mapper.Map(departure, dataDeparture);
-                _unitOfWork.DepartureAddressRepository.SaveChanges();
+                await _unitOfWork.SaveChangeAsync();
 
                 _mapper.Map(destination, dataDestination);
-                _unitOfWork.DestinationAddressRepository.SaveChanges();
-
+                await _unitOfWork.SaveChangeAsync();
+                jobTo.Photo = dataJob.Photo;
                 _mapper.Map(jobTo, dataJob);
-                _unitOfWork.JobRepository.SaveChanges();
+                await _unitOfWork.SaveChangeAsync();
                 return true;
             }
             catch (Exception ex)
@@ -78,7 +80,7 @@ namespace TransportProject.Service.Concrete
         }
         public async Task<Job> AddPhotoJob(string id, IFormFile file)
         {
-            var data = _unitOfWork.JobRepository.Get(x=>x.Id==Convert.ToInt32(id));
+            var data = await _unitOfWork.JobRepository.Get(x=>x.Id==Convert.ToInt32(id));
 
 
            if(data == null)
@@ -92,7 +94,7 @@ namespace TransportProject.Service.Concrete
                 return null;
             }
             data.Photo=result;
-            _unitOfWork.JobRepository.SaveChanges();
+            await _unitOfWork.SaveChangeAsync();
 
             return data;
 
@@ -105,13 +107,15 @@ namespace TransportProject.Service.Concrete
             return response; 
         }
 
-        public ResponseJobDto AddJob(CreateJobDto Jobto,CreateAddress departure,CreateAddress destination)
+        public async  Task<ResponseJobDto> AddJob(CreateJobDto Jobto,CreateAddress departure,CreateAddress destination)
         {
             try
             {
 
-                var dataDestination = _unitOfWork.DestinationAddressRepository.Add(_mapper.Map<DestinationAddress>(destination));
-                var dataDeparture = _unitOfWork.DepartureAddressRepository.Add(_mapper.Map<DepartureAddress>(departure));
+                var dataDestination = await _unitOfWork.DestinationAddressRepository.Add(_mapper.Map<DestinationAddress>(destination));
+                var dataDeparture =await _unitOfWork.DepartureAddressRepository.Add(_mapper.Map<DepartureAddress>(departure));
+                await _unitOfWork.SaveChangeAsync();
+
 
                 if (dataDestination == null || dataDeparture == null) {
                     // return new Exception("Adress kaydı başarısız");
@@ -120,13 +124,14 @@ namespace TransportProject.Service.Concrete
          
 
 
-               var dataJob= _mapper.Map<Job>(Jobto);
+                var dataJob= _mapper.Map<Job>(Jobto);
                 dataJob.IsActive = true;
                 dataJob.DestinationAddressId=dataDestination.Id;
                 dataJob.DepartureAddressId = dataDeparture.Id;
 
 
-                var data= _unitOfWork.JobRepository.Add(dataJob);
+                var data=await _unitOfWork.JobRepository.Add(dataJob);
+                await _unitOfWork.SaveChangeAsync();
 
                 var result= _mapper.Map<ResponseJobDto>(data);
                 return result;
@@ -136,21 +141,21 @@ namespace TransportProject.Service.Concrete
             }
             
         }
-        public bool ChangeJobActive(int id)
+        public async Task<bool> ChangeJobActive(int id)
         {
-            var data = _unitOfWork.JobRepository.Get(x => x.Id == id);
+            var data = await _unitOfWork.JobRepository.Get(x => x.Id == id);
             if (data == null) { return false; }
             data.IsActive = true;
-            _unitOfWork.JobRepository.SaveChanges();
+            await _unitOfWork.SaveChangeAsync();
             return true;
 
         }
-        public bool ChangeJobInActive(int id)
+        public async Task<bool> ChangeJobInActive(int id)
         {
-            var data = _unitOfWork.JobRepository.Get(x => x.Id == id);
+            var data =await _unitOfWork.JobRepository.Get(x => x.Id == id);
             if (data == null) { return false; }
             data.IsActive = false;
-            _unitOfWork.JobRepository.SaveChanges();
+            await _unitOfWork.SaveChangeAsync();
             return true;
 
         }

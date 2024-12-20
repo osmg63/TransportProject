@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TransportProject.Core.Repository.Abstract;
-using TransportProject.Data.Dtos;
 using TransportProject.Data.Entities;
 using TransportProject.Service.Abstract;
 using BCrypt.Net;
+using TransportProject.Data.Dtos.UserDtos;
+using Microsoft.AspNetCore.Identity;
+using TransportProject.Data.Validations;
+using System.ComponentModel.DataAnnotations;
 
 namespace TransportProject.Service.Concrete
 {
@@ -13,56 +16,61 @@ namespace TransportProject.Service.Concrete
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly TokenService _tokenService;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, TokenService tokenService)
+        private readonly ITokenService _tokenService;
+        private readonly ILogger<UserService> _logger;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, ITokenService tokenService, ILogger<UserService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _tokenService = tokenService;
+            _logger = logger;
+
         }
 
-        public ResponseUserDto Add(RequestUserDto user)
+        public async Task<ResponseUserDto> Add(RequestUserDto user)
         {
+          
             user.Password= BCrypt.Net.BCrypt.HashPassword(user.Password, workFactor: 12);
-            var data = _unitOfWork.UserRepository.Add(_mapper.Map<User>(user));
+            var data = await _unitOfWork.UserRepository.Add(_mapper.Map<User>(user));
+            await _unitOfWork.SaveChangeAsync();
             var result = _mapper.Map<ResponseUserDto>(data);
             return result;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var data = _unitOfWork.UserRepository.Get(x => x.Id == id);
+            var data = await _unitOfWork.UserRepository.Get(x => x.Id == id);
             if (data == null)
             {
                 throw new Exception("User not found.");
             }
 
-            return _unitOfWork.UserRepository.Delete(data);
+            return await _unitOfWork.UserRepository.Delete(data);
 
         }
-        public ResponseUserDto UserActiveFalse(int id) {
-            var data = _unitOfWork.UserRepository.Get(x => x.Id == id);
+        public async Task<ResponseUserDto> UserActiveFalse(int id) {
+            var data = await _unitOfWork.UserRepository.Get(x => x.Id == id);
             if (data != null)
             {
                 data.UserActive = false;
                 var result = _mapper.Map<ResponseUserDto>(data);
-                _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.SaveChangeAsync();
                 return result;
 
             }
             return null;
         }
-        public List<ResponseUserDto> GetAll()
+        public async Task<List<ResponseUserDto>> GetAll()
         {
 
 
-            var data = _mapper.Map<List<ResponseUserDto>>(_unitOfWork.UserRepository.GetAll());
+            var data = _mapper.Map<List<ResponseUserDto>>(await _unitOfWork.UserRepository.GetAll());
             return data;
         }
 
-        public ResponseUserDto GetById(int id)
+        public async Task<ResponseUserDto> GetById(int id)
         {
-            var data = _unitOfWork.UserRepository.Get(x => x.Id == id);
+            var data = await _unitOfWork.UserRepository.Get(x => x.Id == id);
             var result = _mapper.Map<ResponseUserDto>(data);
             return result;
         }
@@ -70,7 +78,7 @@ namespace TransportProject.Service.Concrete
         public async Task<ResponseUserDto> Update(RequestUserDto user)
         {
 
-            var data = _unitOfWork.UserRepository.Get(x => x.Id == user.Id);
+            var data =await _unitOfWork.UserRepository.Get(x => x.Id == user.Id);
             if (data != null)
             {
                 user.Password = data.Password;
@@ -79,27 +87,31 @@ namespace TransportProject.Service.Concrete
                 var result = _mapper.Map<ResponseUserDto>(data);
                 return  result;
             }
+            _logger.LogError("Update fail "+ data.UserName);
+
             throw new Exception("Update fail");
 
         }
 
-        public async Task<bool> ResetPassword(int id, string password,string token)
+        public async Task<bool> ResetPassword(ResetPasswordDto dto)
         {
-            var data = _unitOfWork.UserRepository.Get(x => x.Id == id);
-            bool isTokenActive = _tokenService.ValidateToken(token,id);
+            var data = await _unitOfWork.UserRepository.Get(x => x.Id == dto.Id);
+            bool isTokenActive = _tokenService.ValidateToken(dto.Token,dto.Id);
             if (data != null && isTokenActive==true) {
-                data.Password = BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
-              await  _unitOfWork.SaveChangeAsync();
+                data.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password, workFactor: 12);
+              await _unitOfWork.SaveChangeAsync();
                 return true;
             }
+           _logger.LogError("Invalid or expired token."+ data.UserName);
             throw new Exception("Invalid or expired token.");
         }
-        public Object Login(UserLoginDto user)
+        public async Task<Object> Login(UserLoginDto user)
         {
-            var data = _unitOfWork.UserRepository.Get(x=>x.UserName == user.UserName);
+            var data = await _unitOfWork.UserRepository.Get(x=>x.UserName == user.UserName);
             if (data != null && BCrypt.Net.BCrypt.Verify(user.Password, data.Password)) {           
                     return _tokenService.TokenAuthenticationGenerator(data);                 
             }
+            _logger.LogError("Incorrect username or password.." + data.UserName);
             throw new Exception("Incorrect username or password.");
         }
     }
