@@ -27,6 +27,7 @@ namespace TransportProject.Data.Mapper
             CreateMap<ResponseOfferDto, Offer>().ReverseMap();
             CreateMap<ResponseVehicle, Vehicle>().ReverseMap();
             CreateMap<RequestVehicle, Vehicle>().ReverseMap();
+            CreateMap<ViewJobDto, Job>().ReverseMap();
 
 
 

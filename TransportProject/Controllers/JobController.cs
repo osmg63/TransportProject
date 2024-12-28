@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TransportProject.Data.Dtos.JobDtos;
 using TransportProject.Data.Entities;
+using TransportProject.Data.Filters;
 using TransportProject.Service.Abstract;
 using TransportProject.Service.Concrete;
 
@@ -97,6 +98,13 @@ namespace TransportProject.Controllers
             return Ok(result);
 
 
+        }
+        [HttpPost("Pagination")]
+        public async Task<IActionResult> GetPaginationView(FilterDto filter)
+        {
+            var data = await _jobService.GetPaginationView(filter);
+
+            return Ok(data);
         }
     }
 }

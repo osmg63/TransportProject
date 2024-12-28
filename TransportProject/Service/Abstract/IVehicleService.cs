@@ -11,5 +11,8 @@ namespace TransportProject.Service.Abstract
         Task<List<ResponseVehicle>> GetAll();
         Task<ResponseVehicle> GetById(int id);
         Task<ResponseVehicle> Update(ResponseVehicle vehicle);
+        Task<Vehicle> AddPhotoVehicle(string id, IFormFile file);
+        Task<Stream> GetPhotoAsync(string fileName);
+
     }
 }

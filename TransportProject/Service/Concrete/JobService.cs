@@ -3,6 +3,7 @@ using TransportProject.Core.Repository.Abstract;
 using TransportProject.Data.Dtos.AddressDtos;
 using TransportProject.Data.Dtos.JobDtos;
 using TransportProject.Data.Entities.Location;
+using TransportProject.Data.Filters;
 using TransportProject.Service.Abstract;
 
 
@@ -158,6 +159,10 @@ namespace TransportProject.Service.Concrete
             await _unitOfWork.SaveChangeAsync();
             return true;
 
+        }
+        public async Task<PaginationResult<ViewJobDto>> GetPaginationView(FilterDto filter)
+        {
+            return await _unitOfWork.JobRepository.GetPaginationView(filter);
         }
     }
 }

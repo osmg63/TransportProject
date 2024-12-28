@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TransportProject.Data.Dtos.UserDtos;
 using TransportProject.Data.Validations;
 using TransportProject.Service.Abstract;
+using TransportProject.Service.Concrete;
 
 namespace TransportProject.Controllers
 {
@@ -35,10 +36,10 @@ namespace TransportProject.Controllers
         }
        
         [HttpGet("Mail-reset")]
-        public async Task<IActionResult> MailForPasswordReset(int id)
+        public async Task<IActionResult> MailForPasswordReset(string email)
         {
 
-            await _mailService.SendPasswordMailAsync(Convert.ToString(id));
+            await _mailService.SendPasswordMailAsync(email);
             return Ok();
         }
         [HttpGet("UserActiveFalse")]
@@ -46,6 +47,19 @@ namespace TransportProject.Controllers
         {
             await _userService.UserActiveFalse(id);
             return Ok();
+        }
+        [HttpGet("download-photo/{fileName}")]
+        public async Task<IActionResult> DownloadPhoto(string fileName)
+        {
+            try
+            {
+                var fileStream = await _userService.GetPhotoAsync(fileName);
+                return File(fileStream, "application/octet-stream", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error downloading file: {ex.Message}");
+            }
         }
         [AllowAnonymous]
         [HttpPost("Create")]
@@ -98,7 +112,12 @@ namespace TransportProject.Controllers
             var data=await _userService.Login(login);
             return Ok(data);
         }
+        [HttpPost("AddPhotoUserById")]
+        public async Task<IActionResult> AddPhotoUser([FromForm] string id, IFormFile photo)
+        {
+            var result = await _userService.AddPhotoUser(id, photo);
+            return Ok(result);
+        }
 
-       
     }
 }

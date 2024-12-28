@@ -67,7 +67,7 @@ namespace TransportProject.Service.Concrete
             };
 
             var response = await _s3.GetObjectAsync(request);
-            return response.ResponseStream; // İndirilecek dosya içeriği
+            return response.ResponseStream; 
         }
     }
 }

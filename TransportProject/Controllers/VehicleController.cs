@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TransportProject.Data.Dtos.VehicleDtos;
 using TransportProject.Service.Abstract;
+using TransportProject.Service.Concrete;
 
 namespace TransportProject.Controllers
 {
@@ -34,7 +35,20 @@ namespace TransportProject.Controllers
             var data= await _vehicleService.GetById(id);
             return Ok(data);
         }
-
+         
+        [HttpGet("download-photo/{fileName}")]
+        public async Task<IActionResult> DownloadPhoto(string fileName)
+        {
+            try
+            {
+                var fileStream = await _vehicleService.GetPhotoAsync(fileName);
+                return File(fileStream, "application/octet-stream", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error downloading file: {ex.Message}");
+            }
+        }
 
 
         [HttpDelete("Delete")]
@@ -60,7 +74,12 @@ namespace TransportProject.Controllers
 
 
 
-
+        [HttpPost("AddPhotoVehiclById")]
+        public async Task<IActionResult> AddPhotoVehicle([FromForm] string id, IFormFile photo)
+        {
+            var result = await _vehicleService.AddPhotoVehicle(id, photo);
+            return Ok(result);
+        }
 
 
 

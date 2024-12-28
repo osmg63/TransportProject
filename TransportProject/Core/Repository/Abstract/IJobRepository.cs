@@ -1,5 +1,6 @@
 ﻿using TransportProject.Data.Dtos.JobDtos;
 using TransportProject.Data.Entities;
+using TransportProject.Data.Filters;
 
 namespace TransportProject.Core.Repository.Abstract
 {
@@ -9,5 +10,6 @@ namespace TransportProject.Core.Repository.Abstract
         ViewJobDto GetById(int id);
         List<ViewJobDto> GetJobByUserId(int id);
         List<ViewJobDto> GetActiveJobByUserId(int id);
+        Task<PaginationResult<ViewJobDto>> GetPaginationView(FilterDto filter);
     }
 }

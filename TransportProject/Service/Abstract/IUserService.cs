@@ -14,6 +14,8 @@ namespace TransportProject.Service.Abstract
         Task<ResponseUserDto> Update(RequestUserDto user);
         Task<bool> ResetPassword(ResetPasswordDto dto);
         Task<Object> Login(UserLoginDto user);
+        Task<User> AddPhotoUser(string id, IFormFile file);
+        Task<Stream> GetPhotoAsync(string fileName);
 
 
     }

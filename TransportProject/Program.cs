@@ -18,10 +18,20 @@ using NLog;
 using NLog.Web;
 using System;
 using FluentValidation.AspNetCore;
-
+using System.Net;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(7045); // HTTP için
+    options.Listen(IPAddress.Any, 7045);
+    options.ListenLocalhost(44377, listenOptions => // HTTPS için
+    {
+        listenOptions.UseHttps();
+    });
+});
 
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -89,7 +99,7 @@ try
 
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
-
+    builder.WebHost.UseUrls("http://0.0.0.0:7045");
 
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddFluentValidationClientsideAdapters();
@@ -98,7 +108,7 @@ try
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowOrigin",
-            builder => builder.WithOrigins("http://127.0.0.1:5500")
+            builder => builder.AllowAnyOrigin()
                               .AllowAnyHeader()
                               .AllowAnyMethod());
     });
@@ -147,7 +157,6 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-    app.UseHttpsRedirection();
     app.UseCors("AllowOrigin");
 
     app.UseAuthentication();

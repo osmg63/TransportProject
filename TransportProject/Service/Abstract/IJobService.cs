@@ -1,5 +1,6 @@
 ﻿using TransportProject.Data.Dtos.AddressDtos;
 using TransportProject.Data.Dtos.JobDtos;
+using TransportProject.Data.Filters;
 
 namespace TransportProject.Service.Abstract
 {
@@ -15,5 +16,6 @@ namespace TransportProject.Service.Abstract
         Task<ResponseJobDto> AddJob(CreateJobDto Jobto, CreateAddress departure, CreateAddress destination);
         Task<bool> ChangeJobActive(int id);
         Task<bool> ChangeJobInActive(int id);
+        Task<PaginationResult<ViewJobDto>> GetPaginationView(FilterDto filter);
     }
 }

@@ -11,6 +11,7 @@ namespace TransportProject.Data.Dtos.UserDtos
         public string Email { get; set; }
         public string UserType { get; set; }
         public string PhoneNumber { get; set; }
+        public string UserProfilePhoto {  get; set; }
         public bool UserActive { get; set; }
         public DateTime Created { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using TransportProject.Core.Repository.Abstract;
+﻿using AutoMapper;
+using TransportProject.Core.Repository.Abstract;
 using TransportProject.Data.DbContexts;
 
 namespace TransportProject.Core.Repository.Concrete
@@ -6,6 +7,7 @@ namespace TransportProject.Core.Repository.Concrete
     public class UnitOfWork : IUnitOfWork
     {
         private readonly TransportDbContext _context;
+        private readonly IMapper _mapper;
         private IJobRepository _jobRepository;
         private IOfferRepository _offerRepository;
         private IUserRepository _userRepository;
@@ -15,14 +17,15 @@ namespace TransportProject.Core.Repository.Concrete
         private ICityRepository _cityRepository;
         private IMessageRepository _messageRepository;
 
-        public UnitOfWork(TransportDbContext context)
+        public UnitOfWork(TransportDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
 
 
-        public IJobRepository JobRepository=> _jobRepository ??= new JobRepository(_context);
+        public IJobRepository JobRepository=> _jobRepository ??= new JobRepository(_context,_mapper);
         public IDepartureAddressRepository DepartureAddressRepository => _departureAddressRepository ??= new DepartureAddressRepository(_context);
         public IDestinationAddressRepository DestinationAddressRepository => _destinationAddressRepository ??= new DestinationAddressRepository(_context);
 

@@ -18,13 +18,14 @@ namespace TransportProject.Service.Concrete
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly ILogger<UserService> _logger;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, ITokenService tokenService, ILogger<UserService> logger)
+        private readonly IS3Service _s3Service;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, ITokenService tokenService, ILogger<UserService> logger, IS3Service s3Service)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _tokenService = tokenService;
             _logger = logger;
-
+            _s3Service = s3Service;
         }
 
         public async Task<ResponseUserDto> Add(RequestUserDto user)
@@ -107,12 +108,40 @@ namespace TransportProject.Service.Concrete
         }
         public async Task<Object> Login(UserLoginDto user)
         {
-            var data = await _unitOfWork.UserRepository.Get(x=>x.UserName == user.UserName);
+            var data = await _unitOfWork.UserRepository.Get(x=>x.UserName == user.UserName || x.Email==user.UserName);
             if (data != null && BCrypt.Net.BCrypt.Verify(user.Password, data.Password)) {           
                     return _tokenService.TokenAuthenticationGenerator(data);                 
             }
             _logger.LogError("Incorrect username or password.." + data.UserName);
             throw new Exception("Incorrect username or password.");
+        }
+        public async Task<User> AddPhotoUser(string id, IFormFile file)
+        {
+            var data = await _unitOfWork.UserRepository.Get(x => x.Id == Convert.ToInt32(id));
+
+
+            if (data == null)
+            {
+                return null;
+            }
+
+            var result = await _s3Service.UploadFileAsync(file);
+            if (result == null)
+            {
+                return null;
+            }
+            data.UserProfilePhoto = result;
+            await _unitOfWork.SaveChangeAsync();
+
+            return data;
+
+
+
+        }
+        public async Task<Stream> GetPhotoAsync(string fileName)
+        {
+            var response = await _s3Service.DownloadFileAsync(fileName);
+            return response;
         }
     }
 }

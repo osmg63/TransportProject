@@ -11,10 +11,12 @@ namespace TransportProject.Service.Concrete
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public VehicleService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IS3Service _s3Service;
+        public VehicleService(IUnitOfWork unitOfWork, IMapper mapper, IS3Service s3Service)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _s3Service = s3Service;
         }
 
         public async Task<ResponseVehicle> Add(RequestVehicle vehicle)
@@ -80,7 +82,40 @@ namespace TransportProject.Service.Concrete
             
         
         }
+        public async Task<Vehicle> AddPhotoVehicle(string id, IFormFile file)
+        {
+            var data = await _unitOfWork.VehicleRepository.Get(x => x.Id == Convert.ToInt32(id));
 
 
+            if (data == null)
+            {
+                return null;
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file), "File cannot be null");
+            }
+
+            var result = await _s3Service.UploadFileAsync(file);
+            if (result == null)
+            {
+                return null;
+            }
+            data.VehiclePhoto = result;
+            await _unitOfWork.SaveChangeAsync();
+
+            return data;
+
+
+
+        }
+        public async Task<Stream> GetPhotoAsync(string fileName)
+        {
+            var response = await _s3Service.DownloadFileAsync(fileName);
+            return response;
+        }
     }
+
+
 }
+

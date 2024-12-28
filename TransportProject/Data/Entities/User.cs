@@ -11,6 +11,8 @@
         public string UserType {  get; set; }
         public string PhoneNumber {  get; set; }
         public bool UserActive {  get; set; }
+        public string UserProfilePhoto { get; set; }
+
         public DateTime Created { get; set; }
         public ICollection<Job> Jobs { get; set; }
         public ICollection<Offer> Offers { get; set; }
