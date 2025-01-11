@@ -28,6 +28,12 @@ namespace TransportProject.Controllers
             var data = await _userService.GetById(id);
             return Ok(data);
         }
+        [HttpGet("GetByUserName/{userName}")]
+        public async Task<IActionResult> GetByUserName(string  userName)
+        {
+            var data = await _userService.GetByUserName(userName);
+            return Ok(data);
+        }
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -35,14 +41,14 @@ namespace TransportProject.Controllers
             return Ok(data);
         }
        
-        [HttpGet("Mail-reset")]
+        [HttpGet("Mail-reset/{email}")]
         public async Task<IActionResult> MailForPasswordReset(string email)
         {
 
             await _mailService.SendPasswordMailAsync(email);
             return Ok();
         }
-        [HttpGet("UserActiveFalse")]
+        [HttpGet("UserActiveFalse/{id}")]
         public async Task<IActionResult> UserActiveFalse(int id)
         {
             await _userService.UserActiveFalse(id);
@@ -118,6 +124,5 @@ namespace TransportProject.Controllers
             var result = await _userService.AddPhotoUser(id, photo);
             return Ok(result);
         }
-
     }
 }

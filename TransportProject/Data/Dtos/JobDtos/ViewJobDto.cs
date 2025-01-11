@@ -7,6 +7,8 @@
         public string JobDescription { get; set; }
         public string JobPrice { get; set; }
         public DateTime JobDate { get; set; }
+        public string Router { get; set; }
+
         public string Photo { get; set; }
         public int UserId { get; set; }
         public bool Active { get; set; }

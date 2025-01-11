@@ -11,6 +11,8 @@ namespace TransportProject.Data.Dtos.JobDtos
         public string JobPrice { get; set; }
         public DateTime JobDate { get; set; }
         public string Photo { get; set; }
+        public string Router{ get; set; }
+
         public int UserId { get; set; }
         public bool IsActive { get; set; }
         public int DepartureAddressId { get; set; }

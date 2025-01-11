@@ -26,7 +26,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenLocalhost(7045); // HTTP için
-    options.Listen(IPAddress.Any, 7045);
+    options.Listen(IPAddress.Any, 7045,listenOptions => // HTTPS için
+    {
+        listenOptions.UseHttps();   
+    });
     options.ListenLocalhost(44377, listenOptions => // HTTPS için
     {
         listenOptions.UseHttps();

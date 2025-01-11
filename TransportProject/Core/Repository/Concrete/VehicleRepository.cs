@@ -25,6 +25,7 @@ namespace TransportProject.Core.Repository.Concrete
                             Brand = vehicle.Brand,
                             Model = vehicle.Model,
                             Description = vehicle.Description,
+                            VehiclePhoto=vehicle.VehiclePhoto,
                       };
             return await query.ToListAsync();
         }

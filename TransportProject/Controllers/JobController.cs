@@ -26,21 +26,21 @@ namespace TransportProject.Controllers
             return Ok(data);
 
         }
-        [HttpGet("GetById")]
+        [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
             var data = _jobService.GetByIdJob(id);
             return Ok(data);
 
         }
-        [HttpGet("GetJobByUserId")]
+        [HttpGet("GetJobByUserId/{id}")]
         public IActionResult GetJobByUserId(int id)
         {
             var data = _jobService.GetJobByUserId(id);
             return Ok(data);
 
         }
-        [HttpGet("GetActiveJobByUserId")]
+        [HttpGet("GetActiveJobByUserId/{id}")]
         public IActionResult GetActiveJobByUserId(int id)
         {
             var data = _jobService.GetActiveJobByUserId(id);
@@ -77,14 +77,14 @@ namespace TransportProject.Controllers
             return Ok(result);
         }
       
-        [HttpPost("ChangeJobActiveById")]
+        [HttpPost("ChangeJobActiveById/{id}")]
         public async Task<IActionResult> ChangeJobActive(int id)
         {
             var data = await _jobService.ChangeJobActive(id);
             return Ok(data);
 
         }
-        [HttpPost("ChangeJobInActiveById")]
+        [HttpPost("ChangeJobInActiveById/{id}")]
         public async Task<IActionResult> ChangeJobInActive(int id)
         {
             var data = await _jobService.ChangeJobInActive(id);

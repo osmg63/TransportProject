@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TransportProject.Data.DbContexts;
 
@@ -11,9 +12,10 @@ using TransportProject.Data.DbContexts;
 namespace TransportProject.Migrations
 {
     [DbContext(typeof(TransportDbContext))]
-    partial class TransportDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250109235524_fixedRoute")]
+    partial class fixedRoute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

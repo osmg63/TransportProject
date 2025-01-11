@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TransportProject.Service.Abstract;
-using TransportProject.Service.Concrete;
 
 namespace TransportProject.Controllers
 {
@@ -26,7 +24,7 @@ namespace TransportProject.Controllers
 
 
         }
-        [HttpGet("GetAllDistrictByCityId")]
+        [HttpGet("GetAllDistrictByCityId/{id}")]
         public IActionResult GetAllDistrictByCityId(int id)
         {
             var data = _addressService.GetDistrictById(id);
@@ -35,10 +33,19 @@ namespace TransportProject.Controllers
 
 
         }
-        [HttpGet("GetAllNeighborhoodByDistrictId")]
+        [HttpGet("GetAllNeighborhoodByDistrictId/{id}")]
         public IActionResult GetAllNeighborhoodByDistrictId(int id)
         {
             var data = _addressService.GetNeighborhoodById(id);
+            return Ok(data);
+
+
+
+        }
+        [HttpGet("GetCityByName/{name}")]
+        public async Task<IActionResult> GetCityByName(string name)
+        {
+            var data =await _addressService.GetCityByName(name);
             return Ok(data);
 
 

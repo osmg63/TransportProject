@@ -41,6 +41,8 @@ namespace TransportProject.Core.Repository.Concrete
                             JobDate = job.JobDate,
                             JobPrice = job.JobPrice,
                             Photo=job.Photo,
+                            Router = job.Router,
+
                             Active = job.IsActive,
                             UserId = job.UserId,
                             DepartureAddressId = job.DepartureAddressId,
@@ -83,7 +85,9 @@ namespace TransportProject.Core.Repository.Concrete
                             JobPrice = job.JobPrice,
                             Active = job.IsActive,
                             UserId = job.UserId,
+                            Router = job.Router,
 
+                            Photo = job.Photo,
                             DepartureAddressId = job.DepartureAddressId,
                             DestinationAddressId = job.DestinationAddressId,
                             DepartuerLatitude = departureAddress.Latitude,
@@ -124,7 +128,9 @@ namespace TransportProject.Core.Repository.Concrete
                             JobPrice = job.JobPrice,
                             Active = job.IsActive,
                             UserId = job.UserId,
+                            Router = job.Router,
 
+                            Photo = job.Photo,
                             DepartureAddressId = job.DepartureAddressId,
                             DestinationAddressId = job.DestinationAddressId,
                             DepartuerLatitude = departureAddress.Latitude,
@@ -142,7 +148,7 @@ namespace TransportProject.Core.Repository.Concrete
                             DestinationDistrictName = districtDestination.DistrictName,
                             DestinationNeighborhoodName = neighborhoodDestination.NeighborhoodName,
                         };
-            return query.ToList();
+            return query.Distinct().ToList();
         }
 
         public List<ViewJobDto> GetActiveJobByUserId(int id)
@@ -167,7 +173,8 @@ namespace TransportProject.Core.Repository.Concrete
                             JobPrice = job.JobPrice,
                             Active = job.IsActive,
                             UserId = job.UserId,
-
+                            Router = job.Router,
+                            Photo = job.Photo,
                             DepartureAddressId = job.DepartureAddressId,
                             DestinationAddressId = job.DestinationAddressId,
                             DepartuerLatitude = departureAddress.Latitude,
@@ -209,6 +216,8 @@ namespace TransportProject.Core.Repository.Concrete
                                   JobPrice = job.JobPrice,
                                   Active = job.IsActive,
                                   UserId = job.UserId,
+                                  Photo=job.Photo,
+                                  Router=job.Router,
                                   DepartureAddressId = job.DepartureAddressId,
                                   DestinationAddressId = job.DestinationAddressId,
                                   DepartuerLatitude = departureAddress.Latitude,

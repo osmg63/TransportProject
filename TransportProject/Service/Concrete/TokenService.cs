@@ -54,7 +54,7 @@ namespace TransportProject.Service.Concrete
                 new Claim("reset_password","true"),
                 new Claim(ClaimTypes.NameIdentifier,Convert.ToString(userId))
             };
-            DateTime expires= DateTime.Now.AddMinutes(1);
+            DateTime expires= DateTime.Now.AddMinutes(10);
             var token=TokenGenerator(claimDizisi, expires);
             return token;
 

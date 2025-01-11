@@ -143,5 +143,11 @@ namespace TransportProject.Service.Concrete
             var response = await _s3Service.DownloadFileAsync(fileName);
             return response;
         }
+
+        public async Task<ResponseUserDto> GetByUserName(string userName)
+        {
+           var response =await _unitOfWork.UserRepository.Get(x=>x.UserName == userName);
+            return _mapper.Map<ResponseUserDto>(response);
+        }
     }
 }

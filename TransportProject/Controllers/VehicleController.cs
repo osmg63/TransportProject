@@ -16,7 +16,7 @@ namespace TransportProject.Controllers
         {
             _vehicleService = vehicleService;
         }
-        [HttpGet("GetByUserIdVehicles")]
+        [HttpGet("GetByUserIdVehicles/{id}")]
         public async Task<IActionResult> GetByUserIdVehicles(int id)
         {
             var data=await _vehicleService.GetByUserIdVehicles(id);
@@ -29,7 +29,7 @@ namespace TransportProject.Controllers
             return Ok(data);
         }
 
-        [HttpGet("GetById")]
+        [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var data= await _vehicleService.GetById(id);
@@ -51,7 +51,7 @@ namespace TransportProject.Controllers
         }
 
 
-        [HttpDelete("Delete")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
             var data= await _vehicleService.Remove(id);
@@ -64,7 +64,7 @@ namespace TransportProject.Controllers
             var data =await _vehicleService.Add(vehicle);
             return Ok(data);
         }
-
+        
         [HttpPost("UpdateVehicle")]
         public async Task<IActionResult> UpdateVehicle(ResponseVehicle vehicle)
         {

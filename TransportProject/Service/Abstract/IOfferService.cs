@@ -1,4 +1,5 @@
 ﻿using TransportProject.Data.Dtos.OfferDtos;
+using TransportProject.Data.Dtos.UserDtos;
 using TransportProject.Data.Entities;
 
 namespace TransportProject.Service.Abstract
@@ -13,9 +14,10 @@ namespace TransportProject.Service.Abstract
         List<ResponseOfferDto> GetOfferAcceptByUserId(int id);
         List<ResponseOfferDto> GetOfferByUserId(int id);
         Task<bool> OfferAccept(int id);
+        Boolean GetUserOfferJob(int UserId, int JobId);
 
-
-
+        List<ResponseGetOfferByJobIdUserDto> GetOfferByJobIdUser(int jobId);
+        Task<bool> OfferAcceptByOfferId(int id);
 
     }
 }

@@ -22,14 +22,23 @@ namespace TransportProject.Controllers
             return Ok(data);
         
         }
-        [HttpGet("GetOfferByUserId")]
+        [HttpGet("GetOfferByUserId/{id}")]
         public IActionResult GetOffersByUserId(int id) { 
         
             var data=_offerService.GetOfferByUserId(id);
             return Ok(data);
         
         }
-        [HttpGet("GetOfferAcceptByUserId")]
+        [HttpGet("GetUserOfferJob/{userId}/{jobId}")]
+        public IActionResult GetUserOfferJob(int userId,int jobId)
+        {
+
+            var data = _offerService.GetUserOfferJob(userId,jobId);
+
+            return Ok(data);
+
+        }
+        [HttpGet("GetOfferAcceptByUserId/{id}")]
         public IActionResult GetOfferAcceptByUserId(int id)
         {
 
@@ -37,7 +46,16 @@ namespace TransportProject.Controllers
             return Ok(data);
 
         }
-        [HttpDelete]
+        
+        [HttpGet("GetOfferByJobIdUser/{id}")]
+        public IActionResult GetOfferByJobIdUser(int id)
+        {
+
+            var data = _offerService.GetOfferByJobIdUser(id);
+            return Ok(data);
+
+        }
+        [HttpDelete("OfferDeleteById/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
           var data=await  _offerService.OfferDelete(id);
@@ -45,14 +63,14 @@ namespace TransportProject.Controllers
 
         }
 
-        [HttpPost("ChangeOfferActiveById")]
+        [HttpPost("ChangeOfferActiveById/{id}")]
         public async Task<IActionResult> ChangeOfferActive(int id)
         {
             var data =await _offerService.ChangeOfferActive(id);
             return Ok(data);
 
         }
-        [HttpPost("ChangeOfferInActiveById")]
+        [HttpPost("ChangeOfferInActiveById/{id}")]
         public async Task<IActionResult> ChangeOfferInActive(int id)
         {
             var data =await _offerService.ChangeOfferInActive(id);
@@ -63,6 +81,12 @@ namespace TransportProject.Controllers
         public async  Task<IActionResult> Add(RequestOfferDto offer)
         {
             var result = await _offerService.AddOffer(offer);
+            return Ok(result);
+        }
+        [HttpPost("OfferAcceptByOfferId/{id}")]
+        public async Task<IActionResult> OfferAcceptByOfferId(int id)
+        {
+            var result = await _offerService.OfferAcceptByOfferId(id);
             return Ok(result);
         }
     }

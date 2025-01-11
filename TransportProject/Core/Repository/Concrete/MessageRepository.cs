@@ -24,8 +24,10 @@ namespace TransportProject.Core.Repository.Concrete
                          group new { message, user } by user.Id into grouped // Group by UserId
                          select new MessageBoxDto
                          {
+
                              UserId = grouped.Key,
                              UserName = grouped.FirstOrDefault().user.Name,
+                             UserPhoto=grouped.FirstOrDefault().user.UserProfilePhoto,
                              UserSurname = grouped.FirstOrDefault().user.Surname,
                              Message = grouped.OrderByDescending(g => g.message.CreateTime).FirstOrDefault().message.Description,
                              LastMesageTime = grouped.Max(g => g.message.CreateTime), // Select the latest message time

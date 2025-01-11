@@ -19,6 +19,7 @@ namespace TransportProject.Service.Concrete
 
 
         public async Task<ResponseMessageDto> Add(ResponseMessageDto message) {
+           var date= message.CreateTime = DateTime.Now;
             var data= await _unitOfWork.MessageRepository.Add(_mapper.Map<Message>(message));
             await _unitOfWork.SaveChangeAsync();
             var result = _mapper.Map<ResponseMessageDto>(data);

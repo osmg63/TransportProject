@@ -33,6 +33,14 @@ namespace TransportProject.Service.Concrete
             return data;
         
         }
+        public async Task<CityResponseDto> GetCityByName(string name) {
+
+            var  data =await _unitOfWork.CityRepository.Get(x => x.CityName == name);
+            if (data == null) return null;
+           return _mapper.Map<CityResponseDto>(data);
+           
+        
+        }
 
 
 

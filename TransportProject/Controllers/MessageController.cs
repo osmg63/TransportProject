@@ -19,9 +19,9 @@ namespace TransportProject.Controllers
         }
 
 
-        [HttpGet("messagebox")]
-        public async Task<IActionResult> GetByIdSenderUser(int id) { 
-            var result= await _messageService.GetByIdSenderUser(id);
+        [HttpGet("Messagebox/{userId}")]
+        public async Task<IActionResult> GetByIdSenderUser(int userId) { 
+            var result= await _messageService.GetByIdSenderUser(userId);
             return Ok(result);
             
         

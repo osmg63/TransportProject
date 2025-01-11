@@ -33,7 +33,7 @@ namespace TransportProject.Core.Repository.Concrete
 
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
 
-        public IOfferRepository OfferRepository => _offerRepository ??= new OfferRepository(_context);
+        public IOfferRepository OfferRepository => _offerRepository ??= new OfferRepository(_context,_mapper);
 
         public IVehicleRepository VehicleRepository => _vehicleRepository ??= new VehicleRepository(_context);
 

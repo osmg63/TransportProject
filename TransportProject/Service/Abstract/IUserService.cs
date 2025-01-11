@@ -16,6 +16,7 @@ namespace TransportProject.Service.Abstract
         Task<Object> Login(UserLoginDto user);
         Task<User> AddPhotoUser(string id, IFormFile file);
         Task<Stream> GetPhotoAsync(string fileName);
+        Task<ResponseUserDto> GetByUserName(string userName);
 
 
     }

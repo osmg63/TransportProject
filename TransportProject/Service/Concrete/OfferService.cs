@@ -2,6 +2,7 @@
 using System;
 using TransportProject.Core.Repository.Abstract;
 using TransportProject.Data.Dtos.OfferDtos;
+using TransportProject.Data.Dtos.UserDtos;
 using TransportProject.Data.Entities;
 using TransportProject.Service.Abstract;
 
@@ -36,7 +37,6 @@ namespace TransportProject.Service.Concrete
             await _unitOfWork.SaveChangeAsync();
 
             return _mapper.Map<ResponseOfferDto>(data);
-
         }
         public async Task<ResponseOfferDto> ChangeOfferInActive(int id)
         {
@@ -99,13 +99,31 @@ namespace TransportProject.Service.Concrete
 
         }
 
+        public bool GetUserOfferJob(int UserId, int JobId)
+        {
+            var data=   _unitOfWork.OfferRepository.GetUserOfferJob(UserId, JobId);
+            if (data==false)
+            { return false; }
+            return true;
+        }
+        public List<ResponseGetOfferByJobIdUserDto> GetOfferByJobIdUser(int jobId)
+        {
+
+            var data = _unitOfWork.OfferRepository.GetOfferByJobIdUser(jobId);
+            return data;
 
 
-
-
-
-
-
-
+        }
+        public async Task<bool> OfferAcceptByOfferId(int id)
+        {
+           var data=  await _unitOfWork.OfferRepository.Get(x=> x.Id==id);
+            if (data != null)
+            {
+                data.IsAccepted = true;
+                await _unitOfWork.SaveChangeAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -10,6 +10,7 @@ public class Job
     public DateTime JobDate { get; set; }
     public bool IsActive { get; set; }
     public string Photo { get; set; }
+    public string Router {  get; set; }
 
     public ICollection<Offer> Offers { get; set; }
 
